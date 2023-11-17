@@ -1,5 +1,3 @@
-import datetime
-
 from django.conf import settings
 from django.db import models
 
@@ -16,7 +14,7 @@ class Habit(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE, verbose_name='создатель')
     place = models.CharField(max_length=200, **NULLABLE, verbose_name='место выполнения')
-    time = models.TimeField(**NULLABLE, verbose_name='время выполнения')
+    time = models.DateTimeField(**NULLABLE, verbose_name='дата и время выполнения')
     action = models.CharField(max_length=500, **NULLABLE, verbose_name='действие')
     is_pleasant = models.BooleanField(default=False, verbose_name='признак приятной привычки')
     related_habit = models.ForeignKey('self', on_delete=models.SET_NULL, **NULLABLE, verbose_name='связанная привычка')

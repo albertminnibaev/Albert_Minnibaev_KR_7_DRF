@@ -1,15 +1,5 @@
 from rest_framework.permissions import BasePermission
 
-from users.models import User
-
-
-# пользователь относится к группе модераторов
-class IsModerator(BasePermission):
-    message = "Вы не состоите в группе модераторов"
-
-    def has_permission(self, request, view):
-        return request.user.groups.filter(name='moderator').exists()
-
 
 # пользователь редактирует свой профиль
 class IsProfileUser(BasePermission):
@@ -17,6 +7,14 @@ class IsProfileUser(BasePermission):
 
     def has_permission(self, request, view):
         return request.user == view.get_object()
+
+
+# # пользователь относится к группе модераторов
+# class IsModerator(BasePermission):
+#     message = "Вы не состоите в группе модераторов"
+#
+#     def has_permission(self, request, view):
+#         return request.user.groups.filter(name='moderator').exists()
 
 
 # # пользователь не относится к группе модераторов

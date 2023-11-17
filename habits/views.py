@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
@@ -16,6 +15,11 @@ class HabitCreateAPIView(generics.CreateAPIView):
         new_habit = serializer.save()
         new_habit.owner = self.request.user
         new_habit.save()
+
+    # def get_serializer_context(self):
+    #     context = super().get_serializer_context()
+    #     context['user'] = self.queryset.user
+    #     return context
 
 
 class HabitListAPIView(generics.ListAPIView):
@@ -49,7 +53,7 @@ class HabitRetrieveAPIView(generics.RetrieveAPIView):
 
 
 class HabitUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = HabitSerializer
+    serializer_class = HabitCreateSerializer
     queryset = Habit.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]
 
@@ -57,8 +61,3 @@ class HabitUpdateAPIView(generics.UpdateAPIView):
 class HabitDestroyAPIView(generics.DestroyAPIView):
     queryset = Habit.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]
-
-
-
-
-
