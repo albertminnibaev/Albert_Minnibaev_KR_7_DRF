@@ -8,7 +8,7 @@ class TimeToCompleteValidator:
 
     def __call__(self, value):
         tmp_value = dict(value).get(self.field)
-        if tmp_value > 120:
+        if tmp_value and tmp_value > 120:
             raise ValidationError('Время выполнения должно быть не больше 120 секунд')
 
 
@@ -24,7 +24,7 @@ class PeriodValidator:
 
     def __call__(self, value):
         tmp_value = dict(value).get(self.field)
-        if tmp_value not in self.PERIOD:
+        if tmp_value and tmp_value not in self.PERIOD:
             raise ValidationError('Нельзя выполнять привычку реже, чем 1 раз в 7 дней')
 
 
