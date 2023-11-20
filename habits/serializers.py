@@ -7,15 +7,11 @@ from habits.validators import TimeToCompleteValidator, PeriodValidator, RelatedH
 
 class HabitCreateSerializer(serializers.ModelSerializer):
 
-    # current_user = serializers.SerializerMethodField('_user')
-    #
-    # def _user(self, obj):
-    #     request = self.context.get('request', None)
-    #     if request:
-    #         return request.user
-    #
-    # def _user(self, obj):
-    #     return self.context['request'].user
+    def validate_related_habit(self, value):
+        user = self.context['request'].user
+        if value.owner == user:
+            return value
+        raise serializers.ValidationError('В связанные привычки могут попадать только привычки, созданные вами')
 
     class Meta:
         model = Habit
@@ -24,7 +20,7 @@ class HabitCreateSerializer(serializers.ModelSerializer):
             TimeToCompleteValidator(field='time_to_complete'),
             PeriodValidator(field='period'),
             RelatedHabitOrRewardValidator(field=('related_habit', 'reward')),
-            RelatedHabitValidator(field=('related_habit', 'current_user')),
+            RelatedHabitValidator(field='related_habit'),
             IsPleasantValidator(field=('is_pleasant', 'related_habit', 'reward'))
         ]
 
