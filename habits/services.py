@@ -27,6 +27,6 @@ def send_message(habit):
         try:
             requests.post(f"https://api.telegram.org/bot{TELEGRAMM_KEY}/sendMessage", data=data)
         except Exception:
-            raise "Ошибка отправки сообщения пользователю {habit.owner.email}"
+            raise Exception("Ошибка отправки сообщения пользователю {habit.owner.email}")
     else:
-        raise f"У пользователя {habit.owner.email} не указан chat_id для рассылки сообщений"
+        raise Exception(f"У пользователя {habit.owner.email} не указан chat_id для рассылки сообщений")
