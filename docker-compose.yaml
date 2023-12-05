@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+
+  redis:
+    image: redis
+    #command: sudo service redis-server start
+    ports:
+      - '6379:6379'
+#    env_file:
+#      - .env
+
+  db:
+    image: postgres
+    env_file:
+      - .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data/pgdata
+    ports:
+      - '5432:5432'
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+
+  app:
+    build: .
+    tty: true
+    command: sh -c "python manage.py migrate &&
+                    python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+#      db:
+#        condition: service_healthy
+
+  celery:
+    build: .
+    tty: true
+    command: celery -A config worker -l INFO -P eventlet
+    depends_on:
+      - redis
+      - app
+
+  celery_beat:
+    build: .
+    tty: true
+    command: celery -A config beat -l info -S django
+    depends_on:
+      - redis
+      - app
+
+volumes:
+  pg_data:
