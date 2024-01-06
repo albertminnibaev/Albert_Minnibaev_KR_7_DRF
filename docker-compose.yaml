@@ -12,17 +12,20 @@ services:
 
   db:
     image: postgres
-    env_file:
-      - .env
+#    env_file:
+#      - .env
+    environment:
+      POSTGRES_PASSWORD: albert
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - pg_data:/var/lib/postgresql/data/pgdata
     ports:
       - '5432:5432'
-#    healthcheck:
-#      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   app:
     build: .
@@ -34,9 +37,9 @@ services:
     volumes:
       - .:/code
     depends_on:
-      - db
-#      db:
-#        condition: service_healthy
+#      - db
+      db:
+        condition: service_healthy
 
   celery:
     build: .

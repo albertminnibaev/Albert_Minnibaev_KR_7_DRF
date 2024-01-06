@@ -32,6 +32,7 @@ class Migration(migrations.Migration):
                 ('city', models.CharField(blank=True, max_length=100, null=True, verbose_name='город')),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                ('chat_id', models.CharField(blank=True, max_length=50, null=True, verbose_name='chat_id телеграмм')),
             ],
             options={
                 'verbose_name': 'user',
